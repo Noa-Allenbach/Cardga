@@ -16,7 +16,7 @@ public interface IChar
     int Cdr { get; set; }
     double Lf { get; set; }
     double Thorns { get; set; }
-    List<Spell> Spells { get; set; }
+    //List<Spell> Spells { get; set; }
 
     void Damage();
     void Spell(Type spellType, Type targetType);

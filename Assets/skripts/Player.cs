@@ -17,7 +17,7 @@ public class Player : MonoBehaviour, IChar
     public int Cdr { get; set; }
     public double Lf { get; set; }
     public double Thorns { get; set; }
-    public List<Spell> Spells { get; set; }
+    //public List<Spell> Spells { get; set; }
 
     private void Start()
     {
@@ -42,9 +42,10 @@ public class Player : MonoBehaviour, IChar
         Thorns = random.NextDouble() * 50;
 
         // Create a list of random spells
-        Spells = new List<Spell>();
+      //  Spells = new List<Spell>();
         int numSpells = random.Next(1, 5); // Generate a random number of spells between 1 and 4
 
+        /*
         for (int i = 0; i < numSpells; i++)
         {
             Spell spell = new Spell();
@@ -53,6 +54,7 @@ public class Player : MonoBehaviour, IChar
 
             Spells.Add(spell);
         }
+        */
     }
 
     public void Damage()

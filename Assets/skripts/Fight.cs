@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Fight : MonoBehaviour
@@ -7,6 +8,7 @@ public class Fight : MonoBehaviour
     Enemy enemy;
     Player player;
     bool playerTurn;
+    public TextMeshProUGUI attackButton;
 
     // Start is called before the first frame update
     void Start()
@@ -45,8 +47,8 @@ public class Fight : MonoBehaviour
 
     private void PlayerTurn()
     {
-        // Implement the player's turn logic here
-        // For example, display options to the player, wait for input, perform actions, etc.
+        //Make a methods which displays different options to chose for the play
+        attackButton.GetComponent<TextMeshProUGUI>();
 
         // Example:
         player.Damage();
@@ -62,10 +64,15 @@ public class Fight : MonoBehaviour
         // For example, calculate the enemy's actions, perform attacks, etc.
 
         // Example:
-        enemy.Attack();
+        //enemy.Attack();
         player.TakeDamage();
 
         // Set playerTurn to true to switch back to the player's turn
         playerTurn = true;
+    }
+
+    public void AttackButtonPressed()
+    {
+
     }
 }
