@@ -1,78 +1,97 @@
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class Fight : MonoBehaviour
+public class TurnBasedCombat : MonoBehaviour
 {
-    Enemy enemy;
-    Player player;
-    bool playerTurn;
-    public TextMeshProUGUI attackButton;
+    // Reference to player and enemy objects
+    public Player player;
+    public Enemy enemy;
+
+    // UI elements
+    public TextMeshProUGUI messageText;
+    public TextMeshProUGUI playerHPText;
+    public TextMeshProUGUI enemyHPText;
+    public GameObject attackButton;
+
+    private bool playerTurn;
 
     // Start is called before the first frame update
     void Start()
     {
-        enemy = new Enemy();
-        player = new Player();
         playerTurn = true;
-
-        // Perform any necessary initialization for the fight
+        UpdateUI();
     }
 
     // Update is called once per frame
     void Update()
     {
-        // Check if the fight conditions are met and perform the fight logic
-        if (ShouldFight())
+        // Check if it's the player's turn
+        if (playerTurn)
         {
-            if (playerTurn)
+            // Check for player input to trigger the attack
+            if (Input.GetKeyDown(KeyCode.Space))
             {
-                PlayerTurn();
-            }
-            else
-            {
-                EnemyTurn();
+                PlayerAttack();
             }
         }
     }
 
-    private bool ShouldFight()
+    private void PlayerAttack()
     {
-        // Implement the conditions for starting the fight
-        // For example, check if the player and enemy are within a certain range
-        // or if a certain key is pressed, etc.
-        return false; // Replace with your conditions
+        // Player attacks the enemy
+        int damageDealt = player.Attack(enemy);
+        enemy.TakeDamage(damageDealt);
+
+        // Check if the enemy is defeated
+        if (enemy.IsDefeated())
+        {
+            messageText.text = "Player wins!";
+            attackButton.SetActive(false);
+        }
+        else
+        {
+            messageText.text = "Player attacks for " + damageDealt + " damage!";
+            playerTurn = false;
+            StartCoroutine(EnemyTurnDelay());
+        }
+
+        UpdateUI();
     }
 
-    private void PlayerTurn()
+    IEnumerator EnemyTurnDelay()
     {
-        //Make a methods which displays different options to chose for the play
-        attackButton.GetComponent<TextMeshProUGUI>();
+        // Simulate a delay for the enemy's turn
+        yield return new WaitForSeconds(1.5f);
 
-        // Example:
-        player.Damage();
-        enemy.TakeDamage();
-
-        // Set playerTurn to false to switch to the enemy's turn
-        playerTurn = false;
-    }
-
-    private void EnemyTurn()
-    {
-        // Implement the enemy's turn logic here
-        // For example, calculate the enemy's actions, perform attacks, etc.
-
-        // Example:
-        //enemy.Attack();
+        // Enemy's turn
+        int damageDealt = enemy.Attack(player);
         player.TakeDamage();
 
-        // Set playerTurn to true to switch back to the player's turn
-        playerTurn = true;
+        // Check if the player is defeated
+        if (player.IsDefeated())
+        {
+            messageText.text = "Enemy wins!";
+            attackButton.SetActive(false);
+        }
+        else
+        {
+            messageText.text = "Enemy attacks for " + damageDealt + " damage!";
+            playerTurn = true;
+        }
+
+        UpdateUI();
     }
 
-    public void AttackButtonPressed()
+    private void UpdateUI()
     {
+        playerHPText.text = "Player HP: " + player.Hp;
+        enemyHPText.text = "Enemy HP: " + enemy.Hp;
+    }
 
+    public void StartBattle()
+    {
+        messageText.text = "Battle Start!";
+        attackButton.SetActive(true);
     }
 }
